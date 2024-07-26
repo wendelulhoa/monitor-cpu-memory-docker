@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 from datetime import datetime
 
 class sendDiscordController():
@@ -33,7 +34,7 @@ class sendDiscordController():
             self.handleError(record)
 
     # Envia para o Discord
-    def sendToDiscord(self, message):
+    def sendText(self, message):
         # Pega a url do webhook
         webhookUrl = self.configs.get('webhook_url')
 
@@ -58,6 +59,29 @@ class sendDiscordController():
             # Verifica se deu tudo certo
             if response.status_code != 204:
                 print(f"Failed to send log to Discord: {response.status_code}, {response.text}")
+
+    def sendFile(self, message, path):
+        # Envia mensagem de texto
+        self.sendText(message)
+
+        # Faz o envio do arquivo via discord
+        url = self.configs.get('webhook_url')
+        headers = {'Authorization': 'auth_trusted_header'}
+        
+        # Verifica se o arquivo existe antes de tentar abri-lo
+        if os.path.exists(path):
+            files = {
+                'nameFile': (path, open(path, 'rb'), 'application/octet-stream')
+            }
+
+            # Envia para o Discord
+            response = requests.post(url, headers=headers, files=files)
+
+            # Verifica se deu tudo certo
+            if response.status_code != 204:
+                print(f"Failed to send log to Discord: {response.status_code}, {response.text}")
+        else:
+            print(f"File not found: {path}")
     
     # Pega o titulo
     def getTitle(self):

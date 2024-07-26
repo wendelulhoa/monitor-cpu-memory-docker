@@ -74,15 +74,16 @@ class MetricsController():
             'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
         }
 
+        # Gera o gráfico
+        generateGraphController = GenerateGraphController()
+        generateGraphController.generateGraph(name)
+
+        # Envia para o discord
         # Verifica os valores de CPU e memória
         if cpu > 90 or memory > 90:
-            # Gera o gráfico
-            generateGraphController = GenerateGraphController()
-            generateGraphController.generateGraph(name)
-
-            # Envia para o discord
             discordHandler = sendDiscordController(configs)
-            discordHandler.sendToDiscord(f'{description}: CPU={cpu}%, Memória={memory}%.')
+            discordHandler.sendFile(f'{description}: CPU={cpu}%, Memória={memory}%, gráfico:', f'./graph/{name}-cpu_memory_usage.png')
+            return True
 
 
 # Exemplo de uso
@@ -119,17 +120,17 @@ if __name__ == "__main__":
             }
         else:
             # Calcula a média dos valores existentes e novos
-            existing_cpu_percent = existing_data['servidor'][metric['hour']]['cpu_percent']
-            existing_memory_percent = existing_data['servidor'][metric['hour']]['memory_percent']
+            existing_cpu_percent = existing_data['servidor'][hour]['cpu_percent']
+            existing_memory_percent = existing_data['servidor'][hour]['memory_percent']
             
-            new_cpu_percent = round((existing_cpu_percent + cpuPercent) / 2, 1)
-            new_memory_percent = round((existing_memory_percent + memoryPercent) / 2, 1)
+            new_cpu_percent = round((existing_cpu_percent + cpu) / 2, 1)
+            new_memory_percent = round((existing_memory_percent + memory) / 2, 1)
             
-            existing_data['servidor'][metric['hour']] = {
+            existing_data['servidor'][hour] = {
                 'container_name': 'servidor',
                 'cpu_percent': new_cpu_percent,
                 'memory_percent': new_memory_percent,
-                'timestamp': metric['timestamp']
+                'timestamp': timestamp
             }
 
         # Atualiza o arquivo JSON
