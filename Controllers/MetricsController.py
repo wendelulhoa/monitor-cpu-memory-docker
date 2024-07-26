@@ -4,7 +4,7 @@ import psutil
 import docker
 import json
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -18,6 +18,34 @@ from Controllers.GenerateGraphController import GenerateGraphController
 class MetricsController():
     def __init__(self):
         self.client = docker.from_env()
+        self.file_path = './metrics/metrics_server.json'
+        
+    def filterMetricsLast2Hours(self):
+        # Carrega os dados existentes
+        try:
+            with open(self.file_path, 'r') as f:
+                existing_data = json.load(f)
+        except FileNotFoundError:
+            existing_data = {}
+        
+        # Define o limite de tempo (últimas 2 horas)
+        time_limit = datetime.now() - timedelta(hours=2)
+
+        # Função auxiliar para converter string de timestamp para objeto datetime
+        def parse_timestamp(timestamp_str):
+            return datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M')
+
+        # Filtra os dados
+        filtered_data = {}
+        for container, metrics in existing_data.items():
+            filtered_data[container] = {
+                hour: data for hour, data in metrics.items()
+                if parse_timestamp(data['timestamp']) >= time_limit
+            }
+
+        # Salva os dados filtrados de volta no arquivo JSON
+        with open(self.file_path, 'w') as f:
+            json.dump(filtered_data, f, indent=4)
 
    # Função para obter uso de CPU e memória do sistema
     def getSystemMetrics(self):
@@ -74,23 +102,25 @@ class MetricsController():
             'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
         }
 
-        # Gera o gráfico
-        generateGraphController = GenerateGraphController()
-        generateGraphController.generateGraph(name)
-
-        # Envia para o discord
-        # Verifica os valores de CPU e memória
+        # Verifica os valores de CPU e memória e envia para o discord
         if cpu > 90 or memory > 90:
+            # Gera o gráfico
+            generateGraphController = GenerateGraphController()
+            generateGraphController.generateGraph(name)
+
+            # Envia para o discord
             discordHandler = sendDiscordController(configs)
             discordHandler.sendFile(f'{description}: CPU={cpu}%, Memória={memory}%, gráfico:', f'./graph/{name}-cpu_memory_usage.png')
+            
+            # Retorna como sucesso
             return True
-
 
 # Exemplo de uso
 if __name__ == "__main__":
     while True:
         # Instância o controlador de metricas
         metricsController = MetricsController()
+        metricsController.filterMetricsLast2Hours()
 
         # Pega o timestamp
         datetime_object = datetime.now()
@@ -123,8 +153,8 @@ if __name__ == "__main__":
             existing_cpu_percent = existing_data['servidor'][hour]['cpu_percent']
             existing_memory_percent = existing_data['servidor'][hour]['memory_percent']
             
-            new_cpu_percent = round((existing_cpu_percent + cpu) / 2, 1)
-            new_memory_percent = round((existing_memory_percent + memory) / 2, 1)
+            new_cpu_percent = round((existing_cpu_percent + cpu) / 2, 2)
+            new_memory_percent = round((existing_memory_percent + memory) / 2, 2)
             
             existing_data['servidor'][hour] = {
                 'container_name': 'servidor',
@@ -171,8 +201,12 @@ if __name__ == "__main__":
                 existing_cpu_percent = existing_data[containerName][metric['hour']]['cpu_percent']
                 existing_memory_percent = existing_data[containerName][metric['hour']]['memory_percent']
                 
-                new_cpu_percent = round((existing_cpu_percent + cpuPercent) / 2, 1)
-                new_memory_percent = round((existing_memory_percent + memoryPercent) / 2, 1)
+                new_cpu_percent = round((existing_cpu_percent + cpuPercent) / 2, 2)
+                new_memory_percent = round((existing_memory_percent + memoryPercent) / 2, 2)
+
+                # Atualiza com a média
+                cpuPercent = new_cpu_percent
+                memoryPercent = new_memory_percent
                 
                 existing_data[containerName][metric['hour']] = {
                     'container_name': containerName,
@@ -185,4 +219,5 @@ if __name__ == "__main__":
             with open('./metrics/metrics_server.json', 'w') as f:
                 json.dump(existing_data, f, indent=4)
             
+            # Envia para o discord
             metricsController.sendMetrics(cpuPercent, memoryPercent, containerName + ' em alerta', containerName)
