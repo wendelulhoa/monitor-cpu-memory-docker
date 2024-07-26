@@ -29,6 +29,24 @@
             "cpu_percent": 0.0,
             "memory_percent": 0.1,
             "timestamp": "2024-07-26 10:24"
+        },
+        "10:28": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:28"
+        },
+        "10:29": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:29"
+        },
+        "10:30": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:30"
         }
     },
     "serverphp-mcs-apiwhatsapp": {
@@ -61,6 +79,24 @@
             "cpu_percent": 0.0,
             "memory_percent": 0.2,
             "timestamp": "2024-07-26 10:24"
+        },
+        "10:28": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:28"
+        },
+        "10:29": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:29"
+        },
+        "10:30": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:30"
         }
     },
     "phpmyadmin-mcs-apiwhatsapp": {
@@ -93,6 +129,24 @@
             "cpu_percent": 0.0,
             "memory_percent": 0.1,
             "timestamp": "2024-07-26 10:24"
+        },
+        "10:28": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:28"
+        },
+        "10:29": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:29"
+        },
+        "10:30": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:30"
         }
     },
     "docker-teste-stress-stress_docker-1": {
@@ -127,6 +181,24 @@
             "cpu_percent": 0.1,
             "memory_percent": 0.2,
             "timestamp": "2024-07-26 10:24"
+        },
+        "10:28": {
+            "container_name": "servidor",
+            "cpu_percent": 0.1,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:28"
+        },
+        "10:29": {
+            "container_name": "servidor",
+            "cpu_percent": 0.1,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:29"
+        },
+        "10:30": {
+            "container_name": "servidor",
+            "cpu_percent": 2.1,
+            "memory_percent": 8.4,
+            "timestamp": "2024-07-26 10:30"
         }
     }
 }
