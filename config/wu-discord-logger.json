@@ -1,0 +1,26 @@
+{
+    "from": {
+        "name": "Server",
+        "avatar_url": null
+    },
+    "colors": {
+        "DEBUG"     : "607d8b",
+        "INFO"      : "4caf50",
+        "NOTICE"    : "2196f3",
+        "WARNING"   : "ff9800",
+        "ERROR"     : "f44336",
+        "CRITICAL"  : "e91e63",
+        "ALERT"     : "673ab7",
+        "EMERGENCY" : "9c27b0"
+    },
+    "emojis": {
+        "DEBUG": ":beetle:",
+        "INFO": ":bulb:",
+        "NOTICE": ":wink:",
+        "WARNING": ":flushed:",
+        "ERROR": ":poop:",
+        "CRITICAL": ":imp:",
+        "ALERT": ":japanese_ogre:",
+        "EMERGENCY": ":skull:"
+    }
+}

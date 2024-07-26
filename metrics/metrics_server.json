@@ -1,0 +1,132 @@
+{
+    "phpmyadmin-meugrupovip": {
+        "10:08": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:08"
+        },
+        "10:09": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:09"
+        },
+        "10:10": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:10"
+        },
+        "10:23": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:23"
+        },
+        "10:24": {
+            "container_name": "phpmyadmin-meugrupovip",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:24"
+        }
+    },
+    "serverphp-mcs-apiwhatsapp": {
+        "10:08": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:08"
+        },
+        "10:09": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:09"
+        },
+        "10:10": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:10"
+        },
+        "10:23": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:23"
+        },
+        "10:24": {
+            "container_name": "serverphp-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:24"
+        }
+    },
+    "phpmyadmin-mcs-apiwhatsapp": {
+        "10:08": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:08"
+        },
+        "10:09": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:09"
+        },
+        "10:10": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:10"
+        },
+        "10:23": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:23"
+        },
+        "10:24": {
+            "container_name": "phpmyadmin-mcs-apiwhatsapp",
+            "cpu_percent": 0.0,
+            "memory_percent": 0.1,
+            "timestamp": "2024-07-26 10:24"
+        }
+    },
+    "docker-teste-stress-stress_docker-1": {
+        "10:08": {
+            "container_name": "docker-teste-stress-stress_docker-1",
+            "cpu_percent": 8.3,
+            "memory_percent": 55.7,
+            "timestamp": "2024-07-26 10:08"
+        },
+        "10:09": {
+            "container_name": "docker-teste-stress-stress_docker-1",
+            "cpu_percent": 8.4,
+            "memory_percent": 68.8,
+            "timestamp": "2024-07-26 10:09"
+        },
+        "10:10": {
+            "container_name": "docker-teste-stress-stress_docker-1",
+            "cpu_percent": 8.4,
+            "memory_percent": 20.6,
+            "timestamp": "2024-07-26 10:10"
+        }
+    },
+    "servidor": {
+        "10:23": {
+            "container_name": "servidor",
+            "cpu_percent": 0.1,
+            "memory_percent": 0.4,
+            "timestamp": "2024-07-26 10:23"
+        },
+        "10:24": {
+            "container_name": "servidor",
+            "cpu_percent": 0.1,
+            "memory_percent": 0.2,
+            "timestamp": "2024-07-26 10:24"
+        }
+    }
+}
