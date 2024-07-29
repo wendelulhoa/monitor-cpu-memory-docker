@@ -140,7 +140,7 @@ class MetricsController():
     
     def saveFile(self, content, path):
         # Criar o diretório se não existir
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        # os.makedirs(os.path.dirname(path), exist_ok=True)
         
         # Salva os dados atualizados no arquivo JSON
         with open(path, 'w') as f:
