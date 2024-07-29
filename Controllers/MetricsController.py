@@ -164,14 +164,12 @@ if __name__ == "__main__":
         metricsController.filterMetricsLast2Hours()
 
         # Pega o timestamp
-        datetime_object = datetime.now()
+        timezone = pytz.timezone('America/Sao_Paulo')
+        datetime_object = datetime.now(timezone)
         timestamp = datetime_object.strftime('%Y-%m-%d %H:%M')
         hour = datetime_object.strftime('%H:%M')
 
-        fuso_horario = pytz.timezone('America/Sao_Paulo')
-        hora_atual = datetime.now(fuso_horario)
-
-        print(f"Timestamp: {hora_atual}")
+        print(f"Timestamp: {timestamp}")
 
         # Lê o arquivo JSON existente
         existing_data = metricsController.getFile('./metrics/metrics_server.json')
