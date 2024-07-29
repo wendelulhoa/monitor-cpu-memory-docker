@@ -18,6 +18,8 @@ class MetricsController():
         self.client = docker.from_env()
         
     def filterMetricsLast2Hours(self):
+        metricsController.getDockerMetrics()
+
         # Carrega os dados existentes    
         existing_data = self.getFile('./metrics/metrics_server.json')
         
