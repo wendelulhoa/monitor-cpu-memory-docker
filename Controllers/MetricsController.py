@@ -147,7 +147,7 @@ class MetricsController():
             
             # Save the data to the file
             with open(path, 'w') as f:
-                json.dump(data, f)
+                json.dump(content, f)
             print(f"Data successfully saved to {path}")
         except Exception as e:
             print(f"Failed to save data to {path}: {e}")
