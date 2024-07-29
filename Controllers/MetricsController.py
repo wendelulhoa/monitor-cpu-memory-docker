@@ -176,6 +176,8 @@ if __name__ == "__main__":
         # Pega os valores
         cpu, memory = metricsController.getSystemMetrics()
 
+        print(f"CPU: {cpu}%, Memória: {memory}%")
+
         # Verifica se 'servidor' existe no dicionário
         if 'servidor' not in existing_data:
             existing_data['servidor'] = {}

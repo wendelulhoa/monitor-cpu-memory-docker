@@ -1,0 +1,13 @@
+[Unit]
+Description=monitor-cpu-python
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /caminho/para/seu_codigo.py
+WorkingDirectory=/caminho/para/seu_projeto
+Restart=always
+User=seu_usuario
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
