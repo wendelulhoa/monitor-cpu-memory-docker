@@ -24,8 +24,11 @@ class MetricsController():
         # Carrega os dados existentes    
         existing_data = self.getFile('./metrics/metrics_server.json')
         
-        # Define o limite de tempo (últimas 2 horas)
-        time_limit = datetime.now() - timedelta(hours=2)
+        # Define o fuso horário do Brasil
+        brasil_tz = pytz.timezone('America/Sao_Paulo')
+        
+        # Define o limite de tempo (últimas 2 horas) no fuso horário do Brasil
+        time_limit = datetime.now(brasil_tz) - timedelta(hours=2)
 
         # Função auxiliar para converter string de timestamp para objeto datetime
         def parse_timestamp(timestamp_str):
@@ -167,7 +170,8 @@ if __name__ == "__main__":
         metricsController.filterMetricsLast2Hours()
 
         # Pega o timestamp
-        brasil_tz = timezone(timedelta(hours=-3))
+        # Define o fuso horário do Brasil
+        brasil_tz = pytz.timezone('America/Sao_Paulo')
         datetime_object = datetime.now(brasil_tz)
         timestamp = datetime_object.strftime('%Y-%m-%d %H:%M')
         hour = datetime_object.strftime('%H:%M')
