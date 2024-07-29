@@ -24,8 +24,8 @@ class MetricsController():
         # Carrega os dados existentes    
         existing_data = self.getFile('./metrics/metrics_server.json')
         
-        # Define o fuso horário do Brasil
-        brasil_tz = pytz.timezone('America/Sao_Paulo')
+        # Define o fuso horário do Brasil (UTC-3)
+        brasil_tz = timezone(timedelta(hours=-3))
         
         # Define o limite de tempo (últimas 2 horas) no fuso horário do Brasil
         time_limit = datetime.now(brasil_tz) - timedelta(hours=2)
