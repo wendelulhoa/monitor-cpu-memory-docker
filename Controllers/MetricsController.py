@@ -24,7 +24,8 @@ class MetricsController():
         existing_data = self.getFile('./metrics/metrics_server.json')
         
         # Define o limite de tempo (últimas 2 horas)
-        time_limit = datetime.now() - timedelta(hours=2)
+        timezone = pytz.timezone('America/Sao_Paulo')
+        time_limit = datetime.now(timezone) - timedelta(hours=2)
 
         # Função auxiliar para converter string de timestamp para objeto datetime
         def parse_timestamp(timestamp_str):
