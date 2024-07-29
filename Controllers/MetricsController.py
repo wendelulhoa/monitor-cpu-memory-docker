@@ -176,6 +176,8 @@ if __name__ == "__main__":
         timestamp = datetime_object.strftime('%Y-%m-%d %H:%M')
         hour = datetime_object.strftime('%H:%M')
 
+        print(f"Timestamp: {timestamp}")
+
         # Lê o arquivo JSON existente
         existing_data = metricsController.getFile('./metrics/metrics_server.json')
 
