@@ -4,10 +4,8 @@ import psutil
 import docker
 import json
 import time
-from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
+from datetime import datetime, timedelta, timezone
+import pytz
 
 # Adiciona o diretório raiz do projeto ao sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -169,7 +167,8 @@ if __name__ == "__main__":
         metricsController.filterMetricsLast2Hours()
 
         # Pega o timestamp
-        datetime_object = datetime.now()
+        brasil_tz = timezone(timedelta(hours=-3))
+        datetime_object = datetime.now(brasil_tz)
         timestamp = datetime_object.strftime('%Y-%m-%d %H:%M')
         hour = datetime_object.strftime('%H:%M')
 
