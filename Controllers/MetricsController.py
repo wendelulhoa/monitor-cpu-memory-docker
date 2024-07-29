@@ -27,9 +27,10 @@ class MetricsController():
         timezone = pytz.timezone('America/Sao_Paulo')
         time_limit = datetime.now(timezone) - timedelta(hours=2)
 
-        # Função auxiliar para converter string de timestamp para objeto datetime
+        # Função auxiliar para converter string de timestamp para objeto datetime com fuso horário
         def parse_timestamp(timestamp_str):
-            return datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M')
+            naive_dt = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M')
+            return timezone.localize(naive_dt)
 
         # Filtra os dados
         filtered_data = {}
@@ -149,7 +150,6 @@ class MetricsController():
             # Save the data to the file
             with open(path, 'w') as f:
                 json.dump(content, f)
-            print(content)
         except Exception as e:
             print(f"Failed to save data to {path}: {e}")
     
@@ -180,8 +180,6 @@ if __name__ == "__main__":
 
         # Lê o arquivo JSON existente
         existing_data = metricsController.getFile('./metrics/metrics_server.json')
-
-        print(existing_data)
 
         # Pega os valores
         cpu, memory = metricsController.getSystemMetrics()
