@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from datetime import datetime
+import pytz
 
 class sendDiscordController():
     def __init__(self, configs=None):
@@ -78,7 +79,8 @@ class sendDiscordController():
     # Pega o titulo
     def getTitle(self):
         levelName = 'INFO'
-        currentDate = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        timezone = pytz.timezone('America/Sao_Paulo')
+        currentDate = datetime.now(timezone).strftime('%Y-%m-%d %H:%M:%S')
         nameApp = self.configs['from']['name'].replace(' ', '').lower()
         emoji = self.configs['emojis'].get(levelName, '')
 
