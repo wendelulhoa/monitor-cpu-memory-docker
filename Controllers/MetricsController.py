@@ -18,15 +18,13 @@ from Controllers.GenerateGraphController import GenerateGraphController
 class MetricsController():
     def __init__(self):
         self.client = docker.from_env()
-        self.file_path = './metrics/metrics_server.json'
         
     def filterMetricsLast2Hours(self):
         # Carrega os dados existentes
-        try:
-            with open(self.file_path, 'r') as f:
-                existing_data = json.load(f)
-        except FileNotFoundError:
-            existing_data = {}
+        self.getDockerMetrics()
+
+        # Carrega os dados existentes    
+        existing_data = self.getFile('./metrics/metrics_server.json')
         
         # Define o limite de tempo (últimas 2 horas)
         time_limit = datetime.now() - timedelta(hours=2)
@@ -44,8 +42,7 @@ class MetricsController():
             }
 
         # Salva os dados filtrados de volta no arquivo JSON
-        with open(self.file_path, 'w') as f:
-            json.dump(filtered_data, f, indent=4)
+        self.saveFile(filtered_data, './metrics/metrics_server.json')
 
    # Função para obter uso de CPU e memória do sistema
     def getSystemMetrics(self):
@@ -62,18 +59,25 @@ class MetricsController():
         metrics = []
 
         for container in containers:
-            stats = container.stats(stream=False)
-            cpuPercent = self.calculateCpuPercent(stats)
-            memoryUsage = stats['memory_stats']['usage']
-            memoryLimit = stats['memory_stats']['limit']
-            memoryPercent = (memoryUsage / memoryLimit) * 100
+            try:
+                stats = container.stats(stream=False)
+                cpuPercent = self.calculateCpuPercent(stats)
+                memoryUsage = stats['memory_stats']['usage']
+                memoryLimit = stats['memory_stats']['limit']
+                memoryPercent = (memoryUsage / memoryLimit) * 100
 
-            metrics.append({
-                'container_name': container.name,
-                'cpu_percent': cpuPercent,
-                'memory_percent': memoryPercent,
-                'memory_limit': memoryLimit
-            })
+                metrics.append({
+                    'container_name': container.name,
+                    'cpu_percent': cpuPercent,
+                    'memory_percent': memoryPercent,
+                    'memory_limit': memoryLimit
+                })
+            except KeyError as e:
+                # Opcional: Registrar o erro para depuração
+                print(f"Erro ao processar o contêiner {container.name}: {e}")
+            except Exception as e:
+                # Capturar outras exceções
+                print(f"Erro inesperado ao processar o contêiner {container.name}: {e}")
 
         return metrics
 
@@ -81,7 +85,7 @@ class MetricsController():
     def calculateCpuPercent(self, stats):
         cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
         system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
-        
+
         # Verifica se 'percpu_usage' existe
         if 'percpu_usage' in stats['cpu_stats']['cpu_usage']:
             number_cpus = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
@@ -97,6 +101,9 @@ class MetricsController():
 
     # Função para enviar os dados via POST
     def sendMetrics(self, cpu, memory, description='servidor', name=''):
+        # Pega o tempo atual
+        current_time = time.time()
+
         # Configurações do handler
         configs = {
             'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
@@ -104,6 +111,27 @@ class MetricsController():
 
         # Verifica os valores de CPU e memória e envia para o discord
         if cpu > 90 or memory > 90:
+            metricsServerTimestamps = self.getFile('./metrics/timestamps_metrics.json')
+            
+            # Organiza as métricas no dicionário auxServers
+            auxServers = metricsServerTimestamps
+
+            try:
+                auxServers[name] = auxServers[name]
+
+                # Verifica se o name foi enviado nos últimos 60 segundos
+                last_send_time = auxServers[name]['time']
+                if current_time - last_send_time < 60:
+                    return
+                
+                # Atualiza o tempo de envio
+                auxServers[name] = {'time': current_time}
+            except Exception as e:
+                auxServers[name] = {'time': current_time}
+            
+            # Salva os dados no arquivo JSONw
+            self.saveFile(auxServers, './metrics/timestamps_metrics.json')
+
             # Gera o gráfico
             generateGraphController = GenerateGraphController()
             generateGraphController.generateGraph(name)
@@ -114,6 +142,21 @@ class MetricsController():
             
             # Retorna como sucesso
             return True
+    
+    def saveFile(self, content, path):
+       # Salva os dados atualizados no arquivo JSON
+        with open(path, 'w') as f:
+            json.dump(content, f, indent=4) 
+    
+    def getFile(self,path):
+        # Lê o arquivo JSON existente
+        try:
+            with open(path, 'r') as f:
+                existing_data = json.load(f)
+        except FileNotFoundError:
+            existing_data = {}
+        
+        return existing_data
 
 # Exemplo de uso
 if __name__ == "__main__":
@@ -128,11 +171,7 @@ if __name__ == "__main__":
         hour = datetime_object.strftime('%H:%M')
 
         # Lê o arquivo JSON existente
-        try:
-            with open('./metrics/metrics_server.json', 'r') as f:
-                existing_data = json.load(f)
-        except FileNotFoundError:
-            existing_data = {}
+        existing_data = metricsController.getFile('./metrics/metrics_server.json')
 
         # Pega os valores
         cpu, memory = metricsController.getSystemMetrics()
@@ -163,9 +202,8 @@ if __name__ == "__main__":
                 'timestamp': timestamp
             }
 
-        # Atualiza o arquivo JSON
-        with open('./metrics/metrics_server.json', 'w') as f:
-            json.dump(existing_data, f, indent=4)
+        # Salva os dados atualizados no arquivo JSON
+        metricsController.saveFile(existing_data, './metrics/metrics_server.json')
 
         # Envia para o discord   
         metricsController.sendMetrics(cpu, memory, 'Servidor em alerta', 'servidor')
@@ -173,12 +211,11 @@ if __name__ == "__main__":
         # time.sleep(30)
         docker_metrics = metricsController.getDockerMetrics()
 
-        # Adiciona timestamp aos dados
         for metric in docker_metrics:
+            # Adiciona timestamp aos dados
             metric['timestamp'] = timestamp
             metric['hour']      = hour
 
-        for metric in docker_metrics:
             # Pega os valores
             containerName = metric['container_name']
             cpuPercent    = round(metric['cpu_percent'], 1)
@@ -216,8 +253,7 @@ if __name__ == "__main__":
                 }
             
             # Salva os dados atualizados no arquivo JSON
-            with open('./metrics/metrics_server.json', 'w') as f:
-                json.dump(existing_data, f, indent=4)
+            metricsController.saveFile(existing_data, './metrics/metrics_server.json')
             
             # Envia para o discord
             metricsController.sendMetrics(cpuPercent, memoryPercent, containerName + ' em alerta', containerName)

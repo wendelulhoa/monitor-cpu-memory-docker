@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import json
@@ -7,6 +6,7 @@ import json
 class GenerateGraphController:
     def generateGraph(self, container_name):
         print('Gerando gráfico...')
+
          # Lê as métricas do arquivo JSON
         with open('./metrics/metrics_server.json', 'r') as f:
             metricsServer = json.load(f)

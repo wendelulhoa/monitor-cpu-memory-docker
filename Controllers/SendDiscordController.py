@@ -54,11 +54,7 @@ class sendDiscordController():
             }
 
             # Envia para o Discord
-            response = requests.post(webhookUrl, json=payload)
-
-            # Verifica se deu tudo certo
-            if response.status_code != 204:
-                print(f"Failed to send log to Discord: {response.status_code}, {response.text}")
+            requests.post(webhookUrl, json=payload)
 
     def sendFile(self, message, path):
         # Envia mensagem de texto
@@ -75,11 +71,7 @@ class sendDiscordController():
             }
 
             # Envia para o Discord
-            response = requests.post(url, headers=headers, files=files)
-
-            # Verifica se deu tudo certo
-            if response.status_code != 204:
-                print(f"Failed to send log to Discord: {response.status_code}, {response.text}")
+            requests.post(url, headers=headers, files=files)
         else:
             print(f"File not found: {path}")
     
