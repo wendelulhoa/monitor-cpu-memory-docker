@@ -4,8 +4,7 @@ import psutil
 import docker
 import json
 import time
-from datetime import datetime, timedelta, timezone
-import pytz
+from datetime import datetime, timedelta
 
 # Adiciona o diretório raiz do projeto ao sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,17 +17,11 @@ class MetricsController():
         self.client = docker.from_env()
         
     def filterMetricsLast2Hours(self):
-        # Carrega os dados existentes
-        self.getDockerMetrics()
-
         # Carrega os dados existentes    
         existing_data = self.getFile('./metrics/metrics_server.json')
         
-        # Define o fuso horário do Brasil (UTC-3)
-        brasil_tz = timezone(timedelta(hours=-3))
-        
-        # Define o limite de tempo (últimas 2 horas) no fuso horário do Brasil
-        time_limit = datetime.now(brasil_tz) - timedelta(hours=2)
+        # Define o limite de tempo (últimas 2 horas)
+        time_limit = datetime.now() - timedelta(hours=2)
 
         # Função auxiliar para converter string de timestamp para objeto datetime
         def parse_timestamp(timestamp_str):
@@ -170,13 +163,11 @@ if __name__ == "__main__":
         metricsController.filterMetricsLast2Hours()
 
         # Pega o timestamp
-        # Define o fuso horário do Brasil
-        brasil_tz = pytz.timezone('America/Sao_Paulo')
-        datetime_object = datetime.now(brasil_tz)
+        datetime_object = datetime.now()
         timestamp = datetime_object.strftime('%Y-%m-%d %H:%M')
         hour = datetime_object.strftime('%H:%M')
 
-        print(f"Timestamp: {timestamp}")
+        print(f"Timestamp: {timestamp}, Hora: {hour}")
 
         # Lê o arquivo JSON existente
         existing_data = metricsController.getFile('./metrics/metrics_server.json')

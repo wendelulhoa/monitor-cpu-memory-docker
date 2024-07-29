@@ -8,7 +8,7 @@ fi
 
 # Atualizar lista de pacotes e instalar dependências do sistema
 echo "Atualizando lista de pacotes..."
-sudo apt-get update
+# sudo apt-get update
 
 echo "Instalando dependências do sistema..."
 sudo apt-get install -y python3 python3-pip libssl-dev libffi-dev
@@ -21,11 +21,11 @@ fi
 
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
-sudo pip3 install matplotlib
-sudo pip3 install "requests>=2.26.0"
-sudo pip3 install "urllib3>=1.26.5" "chardet>=4.0.0"
-pip install pytz
 pip3 install -r requirements.txt
+pip3 install --force-reinstall docker
+# sudo pip3 install matplotlib
+# sudo pip3 install "chardet>=4.0.0"
+# sudo pip install pytz
 
 # Definir SCRIPT_PATH como o diretório onde o script está localizado
 SCRIPT_PATH=$(dirname "$(readlink -f "$0")")
