@@ -140,7 +140,7 @@ class MetricsController():
     
     def saveFile(self, content, path):
         # Criar o diretório se não existir
-        # os.makedirs(os.path.dirname(path), exist_ok=True)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         
         # Salva os dados atualizados no arquivo JSON
         with open(path, 'w') as f:
@@ -173,6 +173,8 @@ if __name__ == "__main__":
 
         # Lê o arquivo JSON existente
         existing_data = metricsController.getFile('./metrics/metrics_server.json')
+
+        print(existing_data)
 
         # Pega os valores
         cpu, memory = metricsController.getSystemMetrics()
@@ -258,7 +260,7 @@ if __name__ == "__main__":
             # Salva os dados atualizados no arquivo JSON
             metricsController.saveFile(existing_data, './metrics/metrics_server.json')
             
-            print(existing_data)
+            # print(existing_data)
 
             # Envia para o discord
             metricsController.sendMetrics(cpuPercent, memoryPercent, containerName + ' em alerta', containerName)
