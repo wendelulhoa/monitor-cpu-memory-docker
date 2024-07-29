@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import json
+import os
 
 class GenerateGraphController:
     def generateGraph(self, container_name):
@@ -38,6 +39,13 @@ class GenerateGraphController:
                 'Memory_Usage': memory_percents
             })
 
+            # Define o caminho do arquivo de saída
+            output_dir = './graph'
+            output_file = f'{output_dir}/{container_name}-cpu_memory_usage.png'
+
+            # Garante que o diretório de saída exista
+            os.makedirs(output_dir, exist_ok=True)
+
             # Configurando o gráfico
             plt.figure(figsize=(14, 7))
 
@@ -68,5 +76,5 @@ class GenerateGraphController:
 
             # Exibindo o gráfico
             plt.tight_layout()
-            plt.savefig(f'./graph/{container_name}-cpu_memory_usage.png')
+            plt.savefig(output_file)
             plt.close()  # Fecha a figura para liberar memória
