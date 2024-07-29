@@ -258,7 +258,7 @@ if __name__ == "__main__":
             # Salva os dados atualizados no arquivo JSON
             metricsController.saveFile(existing_data, './metrics/metrics_server.json')
             
-            print(f"Container: {containerName}, CPU: {cpuPercent}%, Memória: {memoryPercent}%")
+            print(existing_data)
 
             # Envia para o discord
             metricsController.sendMetrics(cpuPercent, memoryPercent, containerName + ' em alerta', containerName)
