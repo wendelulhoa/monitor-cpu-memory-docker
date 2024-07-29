@@ -5,6 +5,7 @@ import docker
 import json
 import time
 from datetime import datetime, timedelta
+import pytz
 
 # Adiciona o diretório raiz do projeto ao sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -167,7 +168,10 @@ if __name__ == "__main__":
         timestamp = datetime_object.strftime('%Y-%m-%d %H:%M')
         hour = datetime_object.strftime('%H:%M')
 
-        print(f"Timestamp: {timestamp}, Hora: {hour}")
+        fuso_horario = pytz.timezone('America/Sao_Paulo')
+        hora_atual = datetime.now(fuso_horario)
+
+        print(f"Timestamp: {hora_atual}")
 
         # Lê o arquivo JSON existente
         existing_data = metricsController.getFile('./metrics/metrics_server.json')
