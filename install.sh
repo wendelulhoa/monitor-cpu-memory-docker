@@ -21,6 +21,9 @@ fi
 
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
+sudo pip3 install matplotlib
+sudo pip3 install requests>=2.26.0
+sudo pip3 install urllib3>=1.26.5 chardet>=4.0.0
 pip3 install -r requirements.txt
 
 # Definir SCRIPT_PATH como o diretório onde o script está localizado
