@@ -27,13 +27,14 @@ source venv/bin/activate
 
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
-sudo apt install python3-requests -y
-sudo apt install python3-flask -y
-sudo apt install python3-psutil -y
-sudo apt install python3-matplotlib -y
-sudo apt install python3-docker -y
-sudo apt install python3-numpy -y
-sudo apt install python3-pandas -y
+pip install requests flask psutil matplotlib docker numpy pandas
+# sudo apt install python3-requests -y
+# sudo apt install python3-flask -y
+# sudo apt install python3-psutil -y
+# sudo apt install python3-matplotlib -y
+# sudo apt install python3-docker -y
+# sudo apt install python3-numpy -y
+# sudo apt install python3-pandas -y
 
 # Atualizar o pacote docker para evitar incompatibilidades
 sudo pip install --upgrade docker
