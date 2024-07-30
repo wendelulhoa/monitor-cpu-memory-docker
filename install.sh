@@ -11,8 +11,7 @@ echo "Atualizando lista de pacotes..."
 # sudo apt-get update
 
 echo "Instalando dependências do sistema..."
-sudo apt update
-sudo apt install -y python3 python3-venv python3-pip
+sudo apt-get install -y python3 python3-pip libssl-dev libffi-dev
 
 # Verificar se o arquivo requirements.txt existe
 if [ ! -f requirements.txt ]; then
@@ -29,16 +28,16 @@ source venv/bin/activate
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
 pip install requests flask psutil matplotlib docker numpy pandas
-# sudo apt install python3-requests -y
-# sudo apt install python3-flask -y
-# sudo apt install python3-psutil -y
-# sudo apt install python3-matplotlib -y
-# sudo apt install python3-docker -y
-# sudo apt install python3-numpy -y
-# sudo apt install python3-pandas -y
+sudo apt install python3-requests -y
+sudo apt install python3-flask -y
+sudo apt install python3-psutil -y
+sudo apt install python3-matplotlib -y
+sudo apt install python3-docker -y
+sudo apt install python3-numpy -y
+sudo apt install python3-pandas -y
 
 # Atualizar o pacote docker para evitar incompatibilidades
-sudo pip install --upgrade docker
+# sudo pip install --upgrade docker
 
 # pip install -r requirements.txt
 # pip3 install --force-reinstall docker
