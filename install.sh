@@ -29,6 +29,9 @@ sudo apt install python3-docker -y
 sudo apt install python3-numpy -y
 sudo apt install python3-pandas -y
 
+# Atualizar o pacote docker para evitar incompatibilidades
+pip install --upgrade docker
+
 # pip install -r requirements.txt
 # pip3 install --force-reinstall docker
 
