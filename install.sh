@@ -19,6 +19,12 @@ if [ ! -f requirements.txt ]; then
   exit 1
 fi
 
+# Criar o ambiente virtual
+python3 -m venv venv
+
+# Ativar o ambiente virtual
+source venv/bin/activate
+
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
 sudo apt install python3-requests -y
@@ -30,7 +36,7 @@ sudo apt install python3-numpy -y
 sudo apt install python3-pandas -y
 
 # Atualizar o pacote docker para evitar incompatibilidades
-pip install --upgrade docker
+sudo pip install --upgrade docker
 
 # pip install -r requirements.txt
 # pip3 install --force-reinstall docker
