@@ -23,9 +23,6 @@ fi
 echo "Instalando dependências do Python..."
 pip3 install -r requirements.txt
 pip3 install --force-reinstall docker
-# sudo pip3 install matplotlib
-# sudo pip3 install "chardet>=4.0.0"
-# sudo pip install pytz
 
 # Definir SCRIPT_PATH como o diretório onde o script está localizado
 SCRIPT_PATH=$(dirname "$(readlink -f "$0")")
@@ -63,6 +60,7 @@ echo "Habilitando e iniciando o serviço..."
 sudo systemctl daemon-reload
 sudo systemctl enable monitor-cpu-python.service
 sudo systemctl start monitor-cpu-python.service
+# sudo systemctl stop monitor-cpu-python.service
 
 # Verificar o status do serviço
 sudo systemctl status monitor-cpu-python.service

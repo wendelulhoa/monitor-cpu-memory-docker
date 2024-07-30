@@ -18,8 +18,6 @@ class MetricsController():
         self.client = docker.from_env()
         
     def filterMetricsLast2Hours(self):
-        metricsController.getDockerMetrics()
-
         # Carrega os dados existentes    
         existing_data = self.getFile('./metrics/metrics_server.json')
         
@@ -162,6 +160,20 @@ class MetricsController():
             existing_data = {}
         
         return existing_data
+    
+    # Ajusta o limite de memória de um contêiner
+    def adjustMemoryContainer(self, container_name, memory_limit_mb, increment_mb):
+        container = self.client.containers.get(container_name)
+        stats = container.stats(stream=False)
+        memory_usage = stats['memory_stats']['usage'] / (1024 * 1024)  # Convertendo para MB
+
+        print(f'Memória do contêiner {container_name}: {memory_usage} MB, Limite de Memória: {memory_limit_mb} MB')
+
+        new_memory_limit = memory_limit_mb + increment_mb
+        new_memoryswap_limit = new_memory_limit * 2  # Ajuste conforme necessário
+
+        container.update(mem_limit=f'{new_memory_limit}m', memswap_limit=f'{new_memoryswap_limit}m')
+        print(f'Memória do contêiner {container_name} aumentada para {new_memory_limit} MB e memória swap para {new_memoryswap_limit} MB')
 
 # Exemplo de uso
 if __name__ == "__main__":
