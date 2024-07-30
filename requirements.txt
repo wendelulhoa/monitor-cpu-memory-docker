@@ -1,5 +1,7 @@
 requests
 flask
 psutil
+matplotlib
+docker
 pandas
 numpy

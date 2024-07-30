@@ -21,8 +21,15 @@ fi
 
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
-pip3 install -r requirements.txt
-pip3 install --force-reinstall docker
+sudo apt install python3-requests -y
+sudo apt install python3-flask -y
+sudo apt install python3-psutil -y
+sudo apt install python3-matplotlib -y
+sudo apt install python3-docker -y
+sudo apt install python3-numpy -y
+
+# pip install -r requirements.txt
+# pip3 install --force-reinstall docker
 
 # Definir SCRIPT_PATH como o diretório onde o script está localizado
 SCRIPT_PATH=$(dirname "$(readlink -f "$0")")
