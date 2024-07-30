@@ -27,10 +27,7 @@ source venv/bin/activate
 
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
-pip install requests flask psutil matplotlib docker numpy pandas urllib3
-
-# Desativar o ambiente virtual
-deactivate
+pip3 install requests flask psutil matplotlib docker numpy pandas urllib3
 
 # sudo apt install python3-requests -y
 # sudo apt install python3-flask -y
@@ -42,10 +39,13 @@ deactivate
 
 
 # Atualizar o pacote docker para evitar incompatibilidades
-# sudo pip install --upgrade docker
+pip3 install --upgrade docker
 
 # pip install -r requirements.txt
-# pip3 install --force-reinstall docker --break-system-packages
+# pip3 install --force-reinstall docker
+
+# Desativar o ambiente virtual
+deactivate
 
 # Definir SCRIPT_PATH como o diretório onde o script está localizado
 SCRIPT_PATH=$(dirname "$(readlink -f "$0")")
