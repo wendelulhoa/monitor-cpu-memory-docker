@@ -1,3 +1,3 @@
 import docker
 
-print(docker)
+print(docker.from_env())
