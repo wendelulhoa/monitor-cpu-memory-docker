@@ -27,6 +27,7 @@ sudo apt install python3-psutil -y
 sudo apt install python3-matplotlib -y
 sudo apt install python3-docker -y
 sudo apt install python3-numpy -y
+sudo apt install python3-pandas -y
 
 # pip install -r requirements.txt
 # pip3 install --force-reinstall docker
