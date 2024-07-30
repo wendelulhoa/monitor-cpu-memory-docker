@@ -11,7 +11,8 @@ echo "Atualizando lista de pacotes..."
 # sudo apt-get update
 
 echo "Instalando dependências do sistema..."
-sudo apt-get install -y python3 python3-pip libssl-dev libffi-dev
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip
 
 # Verificar se o arquivo requirements.txt existe
 if [ ! -f requirements.txt ]; then
