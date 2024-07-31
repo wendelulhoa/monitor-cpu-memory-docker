@@ -22,9 +22,16 @@ class MetricsServerController(MetricsController):
         cpuPercent = psutil.cpu_percent(interval=1)
         memoryInfo = psutil.virtual_memory()
         memoryPercent = memoryInfo.percent
-        memoryUsedMB = memoryInfo.used / (1024 * 1024)
+        memoryUsed = (memoryInfo.used / (1024 * 1024 * 1024))
 
-        return cpuPercent, memoryPercent, memoryUsedMB
+        # Faz o cálculo para megabit
+        if memoryUsed < 1:
+            memoryUsed = (memoryInfo.used / (1024 * 1024))
+            memoryUsed =  f"{memoryUsed:.2f} MiB"
+        else:
+            memoryUsed =  f"{memoryUsed:.2f} GiB"
+
+        return cpuPercent, memoryPercent, memoryUsed
     
     # Pega o nome do servidor
     def getNameServer(self):
@@ -45,7 +52,7 @@ class MetricsServerController(MetricsController):
         existing_data = self.getFile('./metrics/metrics_server.json')
 
         # Pega os valores
-        cpu, memory, memoryUsedMB = self.getSystemMetrics()
+        cpu, memory, memoryUsed = self.getSystemMetrics()
 
         # Verifica se 'servidor' existe no dicionário
         if serverName not in existing_data:
@@ -77,7 +84,7 @@ class MetricsServerController(MetricsController):
         self.saveFile(existing_data, './metrics/metrics_server.json')
 
         # Envia para o discord   
-        self.sendMetrics(cpu, memory, memoryUsedMB, 'Servidor em alerta', serverName)
+        self.sendMetrics(cpu, memory, memoryUsed, 'Servidor em alerta', serverName)
     
 # Exemplo de uso
 if __name__ == "__main__":

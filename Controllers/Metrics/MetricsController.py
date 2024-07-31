@@ -55,7 +55,7 @@ class MetricsController:
         self.saveFile(filtered_data, './metrics/metrics_server.json')
 
     # Função para enviar os dados via POST
-    def sendMetrics(self, cpu, memory, memoryUsedMB, description='servidor', name=''):
+    def sendMetrics(self, cpu, memory, memoryUsed, description='servidor', name=''):
         # Pega o tempo atual
         current_time = time.time()
 
@@ -93,7 +93,7 @@ class MetricsController:
 
             # Envia para o discord
             discordHandler = sendDiscordController(configs)
-            discordHandler.sendFile(f'{description}: CPU={cpu}%, Memória={memory}%, Memória Usada={memoryUsedMB} MB, gráfico:', f'./graph/{name}-cpu_memory_usage.png')
+            discordHandler.sendFile(f'{description}: CPU={cpu}%, Memória={memory}%, Memória Usada={memoryUsed}, gráfico:', f'./graph/{name}-cpu_memory_usage.png')
             
             # Retorna como sucesso
             return True

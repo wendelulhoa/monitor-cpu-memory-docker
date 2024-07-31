@@ -23,19 +23,28 @@ class MetricsDockerController(MetricsController):
 
         for container in containers:
             try:
-                stats = container.stats(stream=False)
-                cpuPercent = self.calculateCpuPercent(stats)
+                stats_generator = container.stats(decode=True, stream=True)
+                stats = next(stats_generator)  # Pega o primeiro item do gerador
+
+                cpuPercent = 0
                 memoryUsage = stats['memory_stats']['usage']
                 memoryLimit = stats['memory_stats']['limit']
                 memoryPercent = (memoryUsage / memoryLimit) * 100
-                memoryUsedMB = stats['memory_stats']['usage'] / (1024 * 1024)
-                print(stats)
+                memoryUsed = (memoryUsage / (1024 * 1024 * 1024)) # Converte bytes para GiB
+
+                # Faz o cálculo para megabit
+                if memoryUsed < 1:
+                    memoryUsed = (memoryUsage / (1024 * 1024))
+                    memoryUsed =  f"{memoryUsed:.2f} MiB"
+                else:
+                    memoryUsed =  f"{memoryUsed:.2f} GiB"
+
                 metrics.append({
                     'container_name': container.name,
                     'cpu_percent': cpuPercent,
                     'memory_percent': memoryPercent,
                     'memory_limit': memoryLimit,
-                    'memory_used_mb': memoryUsedMB
+                    'memory_used': memoryUsed
                 })
             except KeyError as e:
                 # Opcional: Registrar o erro para depuração
@@ -97,7 +106,7 @@ class MetricsDockerController(MetricsController):
             metric['hour']      = hour
 
             # Pega o valor em mb
-            memoryUsedMB = metric['memory_used_mb']
+            memoryUsed = metric['memory_used']
 
             # Pega os valores
             containerName = metric['container_name']
@@ -138,10 +147,10 @@ class MetricsDockerController(MetricsController):
             # Salva os dados atualizados no arquivo JSON
             metricsDockerController.saveFile(existing_data, './metrics/metrics_server.json')
             
-            print(f"Container: {containerName}, CPU: {cpuPercent}%, Memória: {memoryPercent}%, Memória Usada: {memoryUsedMB:.2f} MB")
+            print(f"Container: {containerName}, CPU: {cpuPercent}%, Memória: {memoryPercent}%, Memória Usada: {memoryUsed}")
 
             # Envia para o discord
-            metricsDockerController.sendMetrics(cpuPercent, memoryPercent, memoryUsedMB, containerName + ' em alerta', containerName)
+            metricsDockerController.sendMetrics(cpuPercent, memoryPercent, memoryUsed, containerName + ' em alerta', containerName)
 # Exemplo de uso
 if __name__ == "__main__":
     while True:
