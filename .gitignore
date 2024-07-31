@@ -1,3 +1,6 @@
 /metrics/
 /graph/
 /Controllers/__pycache__/
+/Controllers/Graph/__pycache__/
+/Controllers/Metrics/__pycache__/
+/Controllers/Discord/__pycache__/

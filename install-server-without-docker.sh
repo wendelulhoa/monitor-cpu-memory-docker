@@ -27,11 +27,10 @@ source venv/bin/activate
 
 # Instalar dependências do Python
 echo "Instalando dependências do Python..."
-pip3 install requests flask psutil matplotlib docker numpy pandas urllib3 --break-system-packages
-pip3 install --upgrade docker --break-system-packages
+pip3 install requests flask psutil matplotlib numpy pandas urllib3 --break-system-packages
 
-pip3 install requests flask psutil matplotlib docker numpy pandas urllib3
-pip3 install --upgrade docker
+# Garante que as dependências do Python foram instaladas
+pip3 install requests flask psutil matplotlib numpy pandas urllib3
 
 # Desativar o ambiente virtual
 deactivate
@@ -56,7 +55,7 @@ Description=monitor-cpu-python
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 "$SCRIPT_PATH/Controllers/MetricsController.py"
+ExecStart=/usr/bin/python3 "$SCRIPT_PATH/Controllers/Metrics/MetricsServerController.py"
 WorkingDirectory=$WORKING_DIR
 Restart=always
 User=$(whoami)
