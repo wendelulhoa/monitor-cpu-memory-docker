@@ -3,6 +3,9 @@ import os
 import docker
 from datetime import datetime, timedelta
 import pytz
+import subprocess
+import json
+import re
 
 # Adiciona o diretório raiz do projeto ao sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,27 +21,34 @@ class MetricsDockerController(MetricsController):
     
     # Função para obter uso de CPU e memória dos contêineres Docker
     def getDockerMetrics(self):
-        containers = self.client.containers.list()
+        # Executa o comando docker stats
+        dockerstats = subprocess.run(['docker', 'stats', '--no-stream', '--format', '{{ json . }}'], stdout=subprocess.PIPE)
+
+        # Converte o resultado para string e separa cada linha
+        dockerstats = dockerstats.stdout.decode('utf-8').strip().split('\n')
+
+        # Transforma cada linha em um objeto JSON
+        stats = [json.loads(line) for line in dockerstats]
+
         metrics = []
 
-        for container in containers:
+        for container in stats:
             try:
-                stats = container.stats(stream=False)
-                cpuPercent = self.calculateCpuPercent(stats)
-                memoryUsage = stats['memory_stats']['usage']
-                memoryLimit = stats['memory_stats']['limit']
-                memoryPercent = (memoryUsage / memoryLimit) * 100
-                memoryUsed = (memoryUsage / (1024 * 1024 * 1024)) # Converte bytes para GiB
+                # Extrai as métricas do JSON
+                cpuPercent = float(container['CPUPerc'].strip('%'))
+                memoryUsage, memoryLimit = self.parseMemory(container['MemUsage'])
+                memoryPercent = float(container['MemPerc'].strip('%'))
+                memoryUsedGiB = memoryUsage / (1024 * 1024 * 1024)  # Converte bytes para GiB
 
                 # Faz o cálculo para megabit
-                if memoryUsed < 1:
-                    memoryUsed = (memoryUsage / (1024 * 1024))
-                    memoryUsed =  f"{memoryUsed:.2f} MiB"
+                if memoryUsedGiB < 1:
+                    memoryUsedMiB = memoryUsage / (1024 * 1024)  # Converte bytes para MiB
+                    memoryUsed = f"{memoryUsedMiB:.2f} MiB"
                 else:
-                    memoryUsed =  f"{memoryUsed:.2f} GiB"
+                    memoryUsed = f"{memoryUsedGiB:.2f} GiB"
 
                 metrics.append({
-                    'container_name': container.name,
+                    'container_name': container['Name'],
                     'cpu_percent': cpuPercent,
                     'memory_percent': memoryPercent,
                     'memory_limit': memoryLimit,
@@ -46,30 +56,33 @@ class MetricsDockerController(MetricsController):
                 })
             except KeyError as e:
                 # Opcional: Registrar o erro para depuração
-                print(f"Erro ao processar o contêiner {container.name}: {e}")
+                print(f"Erro ao processar o contêiner {container['Name']}: {e}")
             except Exception as e:
                 # Capturar outras exceções
-                print(f"Erro inesperado ao processar o contêiner {container.name}: {e}")
+                print(f"Erro inesperado ao processar o contêiner {container['Name']}: {e}")
 
         return metrics
 
-    # Função para calcular a porcentagem de uso de CPU
-    def calculateCpuPercent(self, stats):
-        cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage'] - stats['precpu_stats']['cpu_usage']['total_usage']
-        system_delta = stats['cpu_stats']['system_cpu_usage'] - stats['precpu_stats']['system_cpu_usage']
+    # Função para converter a string de memória para bytes
+    def parseMemory(self, memStr):
+        usage, limit = memStr.split(' / ')
+        return self.convertToBytes(usage), self.convertToBytes(limit)
 
-        # Verifica se 'percpu_usage' existe
-        if 'percpu_usage' in stats['cpu_stats']['cpu_usage']:
-            number_cpus = len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+    # Função para converter uma string de memória para bytes
+    def convertToBytes(self, memStr):
+        units = {"B": 1, "KiB": 1024, "MiB": 1024**2, "GiB": 1024**3}
+        
+        # Verifica se a unidade está anexada ao número
+        letters, numbers = self.separate_letters_numbers(memStr)
+        if letters in units:
+            return float(numbers) * units[letters]
         else:
-            number_cpus = 1  # Assumindo 1 CPU se 'percpu_usage' não estiver presente
+            raise ValueError(f"Unidade desconhecida: {letters}")
 
-        if system_delta > 0.0 and cpu_delta > 0.0:
-            cpu_percent = (cpu_delta / system_delta) * number_cpus * 100.0
-        else:
-            cpu_percent = 0.0
-
-        return cpu_percent
+    def separate_letters_numbers(self, s):
+        letters = ''.join(re.findall(r'[a-zA-Z]', s))
+        numbers = ''.join(re.findall(r'\d+\.?\d*', s))  # Inclui números decimais
+        return letters, numbers
     
     # Ajusta o limite de memória de um contêiner
     def adjustMemoryContainer(self, container_name, memory_limit_mb, increment_mb):
