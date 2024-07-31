@@ -23,10 +23,8 @@ class MetricsDockerController(MetricsController):
 
         for container in containers:
             try:
-                stats_generator = container.stats(decode=True, stream=True)
-                stats = next(stats_generator)  # Pega o primeiro item do gerador
-
-                cpuPercent = 0
+                stats = container.stats(stream=False)
+                cpuPercent = self.calculateCpuPercent(stats)
                 memoryUsage = stats['memory_stats']['usage']
                 memoryLimit = stats['memory_stats']['limit']
                 memoryPercent = (memoryUsage / memoryLimit) * 100
