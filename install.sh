@@ -30,8 +30,8 @@ echo "Instalando dependências do Python..."
 pip3 install requests flask psutil matplotlib docker numpy pandas urllib3 --break-system-packages
 pip3 install --upgrade docker --break-system-packages
 
-# pip install -r requirements.txt
-# pip3 install --force-reinstall docker
+pip3 install requests flask psutil matplotlib docker numpy pandas urllib3
+pip3 install --upgrade docker
 
 # Desativar o ambiente virtual
 deactivate
