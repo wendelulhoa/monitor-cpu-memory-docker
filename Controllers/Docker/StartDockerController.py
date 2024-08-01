@@ -29,11 +29,6 @@ class StartDockerController:
                 start_command = ["docker", "start", container_id]
                 self.runCommand(start_command)
 
-    def displayImages(self):
-        print("Docker Images:")
-        for image in self.images:
-            print(json.dumps(image, indent=2))
-
     def displayContainers(self):
         print("Docker Containers:")
         for container in self.containers:
@@ -46,7 +41,6 @@ def main():
         try:
             manager.getDockerImages()
             manager.getContainerStatus()
-            manager.displayImages()
             manager.displayContainers()
             manager.startInactiveContainers()
         except Exception as e:
