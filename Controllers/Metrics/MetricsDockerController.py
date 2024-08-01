@@ -161,7 +161,7 @@ class MetricsDockerController(MetricsController):
             print(f"Container: {containerName}, CPU: {cpuPercent}%, Memória: {memoryPercent}%, Memória Usada: {memoryUsed}")
 
             # Envia para o discord
-            metricsDockerController.sendMetrics(cpuPercent, memoryPercent, memoryUsed, containerName + ' em alerta', containerName)
+            metricsDockerController.sendMetrics(cpuPercent, memoryPercent, memoryUsed, True, containerName + ' em alerta', containerName)
 # Exemplo de uso
 if __name__ == "__main__":
     while True:

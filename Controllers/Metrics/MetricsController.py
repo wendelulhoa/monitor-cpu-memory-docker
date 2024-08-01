@@ -55,7 +55,7 @@ class MetricsController:
         self.saveFile(filtered_data, './metrics/metrics_server.json')
 
     # Função para enviar os dados via POST
-    def sendMetrics(self, cpu, memory, memoryUsed, description='servidor', name=''):
+    def sendMetrics(self, cpu, memory, memoryUsed, isDocker, description='servidor', name=''):
         # Pega o tempo atual
         current_time = time.time()
 
@@ -65,7 +65,7 @@ class MetricsController:
         }
 
         # Verifica os valores de CPU e memória e envia para o discord
-        if cpu > 90 or memory > 90:
+        if isDocker and cpu >= 120 or memory > 90 or isDocker == False and cpu > 90 or memory > 90:
             metricsServerTimestamps = self.getFile('./metrics/timestamps_metrics.json')
             
             # Organiza as métricas no dicionário auxServers
