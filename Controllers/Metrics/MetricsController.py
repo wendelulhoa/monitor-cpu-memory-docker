@@ -65,7 +65,7 @@ class MetricsController:
         }
 
         # Verifica os valores de CPU e memória e envia para o discord
-        if isDocker and cpu >= 120 or memory > 90 or isDocker == False and cpu > 90 or memory > 90:
+        if isDocker and cpu >= 90 or memory > 90 or isDocker == False and cpu > 90 or memory > 90:
             metricsServerTimestamps = self.getFile('./metrics/timestamps_metrics.json')
             
             # Organiza as métricas no dicionário auxServers
