@@ -8,9 +8,13 @@ class GenerateGraphController:
     def generateGraph(self, container_name):
         print('Gerando gráfico...')
 
-         # Lê as métricas do arquivo JSON
-        with open('./metrics/metrics_server.json', 'r') as f:
-            metricsServer = json.load(f)
+        try:
+            with open('./metrics/metrics_server.json', 'r') as f:
+                metricsServer = json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"Erro ao decodificar JSON: {e}")
+            # Lidar com o erro, por exemplo, recriar o arquivo JSON ou usar um valor padrão
+            metricsServer = {}
 
         try:
             # Organiza as métricas no dicionário auxDockers
