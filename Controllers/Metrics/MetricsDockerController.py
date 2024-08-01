@@ -158,7 +158,7 @@ class MetricsDockerController(MetricsController):
             # Salva os dados atualizados no arquivo JSON
             metricsDockerController.saveFile(existing_data, './metrics/metrics_server.json')
             
-            print(f"Container: {containerName}, CPU: {cpuPercent}%, Memória: {memoryPercent}%, Memória Usada: {memoryUsed}")
+            # print(f"Container: {containerName}, CPU: {cpuPercent}%, Memória: {memoryPercent}%, Memória Usada: {memoryUsed}")
 
             # Envia para o discord
             metricsDockerController.sendMetrics(cpuPercent, memoryPercent, memoryUsed, True, containerName + ' em alerta', containerName)

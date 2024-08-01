@@ -63,9 +63,9 @@ class MetricsController:
         configs = {
             'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
         }
-
+        print(name, (isDocker and cpu >= 90 or memory > 90) or (isDocker == False and cpu > 90 or memory > 90))
         # Verifica os valores de CPU e memória e envia para o discord
-        if isDocker and cpu >= 90 or memory > 90 or isDocker == False and cpu > 90 or memory > 90:
+        if (isDocker and cpu >= 90 or memory > 90) or (isDocker == False and cpu > 90 or memory > 90):
             metricsServerTimestamps = self.getFile('./metrics/timestamps_metrics.json')
             
             # Organiza as métricas no dicionário auxServers
