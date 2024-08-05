@@ -84,7 +84,7 @@ class MetricsServerController(MetricsController):
         self.saveFile(existing_data, './metrics/metrics_server.json')
 
         # Envia para o discord   
-        self.sendMetrics(cpu, memory, memoryUsed, False, 'Servidor em alerta', serverName)
+        self.sendMetrics(cpu, memory, memoryUsed, False, f'{self.serverName} em alerta', serverName)
     
 # Exemplo de uso
 if __name__ == "__main__":
