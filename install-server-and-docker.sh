@@ -47,11 +47,12 @@ echo "SCRIPT_PATH: $SCRIPT_PATH"
 echo "WORKING_DIR: $WORKING_DIR"
 
 # Criar o arquivo de serviço systemd
-SERVICE_FILE=/etc/systemd/system/monitor-cpu-python.service
+SERVICE_FILE_METRICS="/etc/systemd/system/monitor-cpu-python.service"
+SERVICE_FILE_START_DOCKER="/etc/systemd/system/start-docker-python.service"
 
 echo "Criando o arquivo de serviço systemd em $SERVICE_FILE= $SCRIPT_PATH..."
 
-cat <<EOL | sudo tee $SERVICE_FILE
+cat <<EOL | sudo tee $SERVICE_FILE_METRICS
 [Unit]
 Description=monitor-cpu-python
 After=network.target
@@ -68,12 +69,37 @@ Environment=PYTHONUNBUFFERED=1
 WantedBy=multi-user.target
 EOL
 
+# Criar serviço para StartDockerController
+cat <<EOL | sudo tee $SERVICE_FILE_START_DOCKER
+[Unit]
+Description=start-docker-python
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 "$SCRIPT_PATH/Controllers/Docker/StartDockerController.py"
+WorkingDirectory=$WORKING_DIR
+Restart=always
+User=$(whoami)
+Group=$(whoami)
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
 # Habilitar e iniciar o serviço
 echo "Habilitando e iniciando o serviço..."
+# Recarregar os serviços do systemd
 sudo systemctl daemon-reload
+
+# Habilitar e iniciar os serviços
 sudo systemctl enable monitor-cpu-python.service
 sudo systemctl start monitor-cpu-python.service
+
+sudo systemctl enable start-docker-python.service
+sudo systemctl start start-docker-python.service
 # sudo systemctl stop monitor-cpu-python.service
 
 # Verificar o status do serviço
 sudo systemctl status monitor-cpu-python.service
+# sudo systemctl status start-docker-python.service

@@ -45,7 +45,9 @@ def main():
             manager.startInactiveContainers()
         except Exception as e:
             print(f"An error occurred: {e}")
-        time.sleep(10)
+
+        # Aguarda 120 segundos antes de executar novamente
+        time.sleep(120)
 
 if __name__ == "__main__":
     main()
