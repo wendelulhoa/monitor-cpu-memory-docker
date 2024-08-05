@@ -8,7 +8,7 @@ fi
 
 # Atualizar lista de pacotes e instalar dependências do sistema
 echo "Atualizando lista de pacotes..."
-# sudo apt-get update
+sudo apt-get update
 
 echo "Instalando dependências do sistema..."
 sudo apt-get install -y python3 python3-pip libssl-dev libffi-dev
