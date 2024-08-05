@@ -62,7 +62,7 @@ class MetricsController:
 
         # Configurações do handler
         configs = {
-            'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
+            'webhook_url': 'https://discord.com/api/webhooks/1261315045611278396/40jeot2PTgbYOUqkOhHNePgtL0FC-Gi8EgSVBPVGG8sGTZG8YfqYM44FrcnzdVXCSDIr'
         }
 
         # Limite de CPU
