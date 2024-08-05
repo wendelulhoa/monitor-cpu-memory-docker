@@ -5,7 +5,7 @@ import json
 import os
 
 class GenerateGraphController:
-    def generateGraph(self, container_name):
+    def generateGraph(self, name, isDocker, serverName):
         print('Gerando gráfico...')
 
         try:
@@ -19,12 +19,12 @@ class GenerateGraphController:
         try:
             # Organiza as métricas no dicionário auxDockers
             auxDockers = {}
-            auxDockers[container_name] = metricsServer[container_name]
+            auxDockers[name] = metricsServer[name]
         except Exception as e:
             return "Container não encontrado"
 
         # Gera um gráfico para cada container
-        for container_name, metrics in auxDockers.items():
+        for name, metrics in auxDockers.items():
             # Listas para armazenar os dados
             timestamps = []
             cpu_percents = []
@@ -45,7 +45,7 @@ class GenerateGraphController:
 
             # Define o caminho do arquivo de saída
             output_dir = './graph'
-            output_file = f'{output_dir}/{container_name}-cpu_memory_usage.png'
+            output_file = f'{output_dir}/{name}-cpu_memory_usage.png'
 
             # Garante que o diretório de saída exista
             os.makedirs(output_dir, exist_ok=True)
@@ -67,7 +67,11 @@ class GenerateGraphController:
             plt.bar(r2, data['Memory_Usage'], width=bar_width, color='red', label='Uso de Memória (%)')
 
             # Configurando títulos e rótulos
-            plt.title(f'Uso de CPU e Memória para {container_name} por Minuto')
+            if isDocker:
+                plt.title(f'Uso de CPU e Memória para {name} - {serverName} por Minuto')
+            else:
+                plt.title(f'Uso de CPU e Memória para {serverName} por Minuto')
+
             plt.xlabel('Tempo')
             plt.ylabel('Porcentagem de Uso')
             plt.legend()

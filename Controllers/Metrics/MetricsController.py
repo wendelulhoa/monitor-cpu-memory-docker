@@ -16,6 +16,7 @@ class MetricsController:
     def __init__(self):
         super().__init__()
         self.timezone = pytz.timezone('America/Sao_Paulo')
+        self.serverName = self.getFile('./config/servername.json')['name']
 
     def getFile(self, filepath):
         try:
@@ -119,7 +120,7 @@ class MetricsController:
 
             # Gera o gráfico
             generateGraphController = GenerateGraphController()
-            generateGraphController.generateGraph(name)
+            generateGraphController.generateGraph(name, isDocker, self.serverName)
 
             # Envia para o discord
             discordHandler = sendDiscordController(configs)
