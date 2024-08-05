@@ -65,25 +65,37 @@ class MetricsController:
             'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
         }
 
+        # Limite de CPU
+        limitCpuDocker = 90
+
         # Extrair a parte 'session32' do nome do Docker
-        if isDocker:
+        if isDocker and 'session' in name:
             session_name = name.split('-')[-1]
             session_folder = f'/root/shell-wppconnect-docker/datadir/{session_name}'
 
             # Verificar se a pasta existe
             if not os.path.exists(session_folder):
-                raise FileNotFoundError(f"A pasta {session_folder} não existe")
+                return False
 
             # Carregar variáveis de ambiente do arquivo .env
             env_path = os.path.join(session_folder, '.env')
             if os.path.exists(env_path):
                 load_dotenv(env_path)
+                limitCpuEnv = os.getenv('LIMIT_CPU')
+                
+                if limitCpuEnv is not None:
+                    try:
+                        limitCpuEnv = int(limitCpuEnv) * 100
+                        limitCpuDocker = (limitCpuEnv * 0.9)
+                    except ValueError:
+                        print("O valor de LIMIT_CPU não é um número inteiro")
+                else:
+                    print("A variável LIMIT_CPU não está definida no arquivo .env")
             else:
-                raise FileNotFoundError(f"O arquivo .env não foi encontrado em {session_folder}")
-
+                print(f"O arquivo .env não foi encontrado em {session_folder}")
 
         # Verifica os valores de CPU e memória e envia para o discord
-        if (isDocker and cpu >= 90 or memory > 90) or (isDocker == False and cpu > 90 or memory > 90):
+        if (isDocker and cpu >= limitCpuDocker or memory > 90) or (isDocker == False and cpu > 90 or memory > 90):
             metricsServerTimestamps = self.getFile('./metrics/timestamps_metrics.json')
             
             # Organiza as métricas no dicionário auxServers
