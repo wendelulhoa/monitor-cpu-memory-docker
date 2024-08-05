@@ -4,6 +4,7 @@ import json
 import time
 from datetime import datetime, timedelta
 import pytz
+from dotenv import load_dotenv
 
 # Adiciona o diretório raiz do projeto ao sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -63,7 +64,24 @@ class MetricsController:
         configs = {
             'webhook_url': 'https://discord.com/api/webhooks/1238229050690900059/hKaWqJ1dthfqVsvCFRdrFmEtW7EWM5yXLIZEHlPTWggZmjO9qy7RAPX-kkjq9LY2KibN'
         }
-        print(name, (isDocker and cpu >= 90 or memory > 90) or (isDocker == False and cpu > 90 or memory > 90))
+
+        # Extrair a parte 'session32' do nome do Docker
+        if isDocker:
+            session_name = name.split('-')[-1]
+            session_folder = f'/root/shell-wppconnect-docker/datadir/{session_name}'
+
+            # Verificar se a pasta existe
+            if not os.path.exists(session_folder):
+                raise FileNotFoundError(f"A pasta {session_folder} não existe")
+
+            # Carregar variáveis de ambiente do arquivo .env
+            env_path = os.path.join(session_folder, '.env')
+            if os.path.exists(env_path):
+                load_dotenv(env_path)
+            else:
+                raise FileNotFoundError(f"O arquivo .env não foi encontrado em {session_folder}")
+
+
         # Verifica os valores de CPU e memória e envia para o discord
         if (isDocker and cpu >= 90 or memory > 90) or (isDocker == False and cpu > 90 or memory > 90):
             metricsServerTimestamps = self.getFile('./metrics/timestamps_metrics.json')
